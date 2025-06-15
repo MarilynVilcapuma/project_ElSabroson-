@@ -1,0 +1,93 @@
+<div class="container">
+  <div class="header">
+    <h1>Productos</h1>
+    <button class="btn-nuevo" (click)="openProductForm()">+ Nuevo Producto</button>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Gestión de Productos</h2>
+      <p>Administra los productos del sistema</p>
+      <div class="toolbar">
+        <input
+          type="text"
+          placeholder="Buscar por nombre, descripción o categoría..."
+          [(ngModel)]="searchTerm"
+          (input)="filterProducts()"
+        />
+
+        <select [(ngModel)]="filterCategory" (change)="filterProducts()">
+          <option value="">Todas las categorías</option>
+          <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+        </select>
+
+        <select [(ngModel)]="filterState" (change)="filterProducts()">
+          <option value="">Todos los estados</option>
+          <option value="A">Activos</option>
+          <option value="I">Inactivos</option>
+        </select>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Registro</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of filteredProducts">
+          <td>{{ product.productId }}</td>
+          <td>{{ product.name }}</td>
+          <td>{{ product.category }}</td>
+          <td>{{ product.description }}</td>
+          <td>{{ product.price | currency:'USD' }}</td>
+          <td>{{ product.stock }}</td>
+          <td>{{ formatDate(product.registrationDate) }}</td>
+          <td>
+            <span
+              class="estado"
+              [ngClass]="product.state === 'A' ? 'activo' : 'inactivo'"
+            >
+              {{ product.state === 'A' ? 'Activo' : 'Inactivo' }}
+            </span>
+          </td>
+          <td class="acciones">
+            <button
+              class="icon-btn editar"
+              title="Editar"
+              (click)="editProduct(product)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              *ngIf="product.state === 'A'"
+              class="icon-btn eliminar"
+              title="Eliminar"
+              (click)="deleteProduct(product.productId)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button
+              *ngIf="product.state === 'I'"
+              class="icon-btn restaurar"
+              title="Restaurar"
+              (click)="restoreProduct(product.productId)"
+            >
+              <mat-icon>restore</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

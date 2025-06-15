@@ -1,0 +1,142 @@
+.container {
+    padding: 20px 20px 10px 0px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 19px;
+  }
+  
+  .btn-nuevo {
+    background-color: #e22727;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 14px 27px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .btn-nuevo:hover{
+    background-color: #b71c1c;
+  }
+  
+  .card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+  
+  .card-header h2 {
+    margin-bottom: 10px;
+  }
+
+  .card-header p{
+    color: rgb(156, 156, 156);
+  }
+  
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .toolbar input,
+  .toolbar select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+  }
+  
+  .toolbar input {
+    flex: 1;
+    min-width: 220px;
+  }
+  
+  table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    border: solid 1px #d3d3d3;
+  }
+
+  th{
+    color: rgb(166, 164, 164);
+  }
+  
+  th, td {
+    padding: 20px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+    vertical-align: top;
+  }
+  
+  .badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.9em;
+    font-weight: bold;
+    display: inline-block;
+  }
+  
+  .badge.administrador {
+    background-color: #f8d7da;
+    color: #b71c1c;
+  }
+  
+  .badge.empleado {
+    background-color: #fff3cd;
+    color: #856404;
+  }
+  
+  .badge.cliente {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  
+  .estado {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: bold;
+  }
+  
+  .estado.activo {
+    background-color: #c20b0b;
+    color: white;
+  }
+  
+  .estado.inactivo {
+    background-color: #fca82b;
+    color: white;
+  }
+  
+  .acciones .icon-btn {
+    background: none;
+    border: none;
+    font-size: 1em;
+    margin-left: 15px;
+    cursor: pointer;
+    margin-right: 5px;
+    padding: 5px;
+    border-radius: 5px;
+  }
+  
+  .icon-btn.editar { color: #333; }
+  .icon-btn.eliminar { color: #d32f2f; }
+
+  .icon-btn.editar:hover{
+    background-color: #e8c354;
+  }
+
+  .icon-btn.eliminar:hover{
+    background-color: #f0b5b5;
+  }
+  

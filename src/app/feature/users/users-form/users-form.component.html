@@ -1,0 +1,69 @@
+<div class="modal-container" *ngIf="visible">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Nuevo Usuario</h2>
+      <p>Completa el formulario para crear un nuevo usuario</p>
+      <!-- Botón cerrar -->
+      <button class="close-button" aria-label="Cerrar" (click)="onCancel()">×</button>
+    </div>
+
+    <form class="form-grid">
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" class="input error" placeholder="Ingrese el nombre" [(ngModel)]="user.nombre" name="nombre" />
+      </div>
+
+      <div class="form-group">
+        <label>Apellido</label>
+        <input type="text" class="input" placeholder="Ingrese el apellido" [(ngModel)]="user.apellido" name="apellido" />
+      </div>
+
+      <div class="form-group">
+        <label>Tipo Documento</label>
+        <select class="input" [(ngModel)]="user.tipoDocumento" name="tipoDocumento">
+          <option>DNI</option>
+          <option>CNE</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Número de Documento</label>
+        <input type="text" class="input" placeholder="Ingrese el número" [(ngModel)]="user.numeroDocumento" name="numeroDocumento" />
+      </div>
+
+      <div class="form-group">
+        <label>Teléfono</label>
+        <input type="text" class="input" placeholder="Ingrese el teléfono" [(ngModel)]="user.telefono" name="telefono" />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="input" placeholder="Ingrese el email" [(ngModel)]="user.email" name="email" />
+      </div>
+
+      <div class="form-group">
+        <label>Rol</label>
+        <select class="input" [(ngModel)]="user.rol" name="rol">
+          <option>Administrador</option>
+          <option>Empleado</option>
+          <option>Cliente</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Estado</label>
+        <select class="input" [(ngModel)]="user.estado" name="estado">
+          <option>Activo</option>
+          <option>Inactivo</option>
+        </select>
+      </div>
+    </form>
+
+    <div class="modal-footer">
+      <!-- Botón cancelar -->
+      <button class="btn cancel" type="button" (click)="onCancel()">Cancelar</button>
+      <!-- Botón crear -->
+      <button class="btn confirm" type="button" (click)="onCreate()">Crear usuario</button>
+    </div>
+  </div>
+</div>
