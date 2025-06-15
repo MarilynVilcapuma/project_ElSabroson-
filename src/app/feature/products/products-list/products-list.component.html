@@ -94,6 +94,6 @@
 
 <app-products-form
   [visible]="showProductForm"
-  (cancel)="onProductFormCancel()"
-  (create)="onProductFormCreate($event)">
-</app-products-form>
+  [productData]="currentProduct"  (cancel)="onProductFormCancel()"
+  (create)="onProductFormCreate($event)"
+  (update)="onProductFormUpdate($event)"> </app-products-form>

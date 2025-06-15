@@ -5,16 +5,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ProductService } from '../../../core/services/products.service';
-import { Products } from '../../../core/interfaces/products';
+import { Products } from '../../../core/interfaces/products'; 
 import Swal from 'sweetalert2';
-import { ProductsFormComponent } from '../products-form/products-form.component';
+import { ProductsFormComponent } from '../products-form/products-form.component'; 
 
 @Component({
   selector: 'app-products-list',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule, 
     MatButtonModule,
     MatIconModule,
     ProductsFormComponent 
@@ -34,8 +34,7 @@ export class ProductsListComponent implements OnInit {
   filterState: string = '';
 
   showProductForm: boolean = false; 
- 
-
+  currentProduct: Products | null = null; 
 
   constructor(private productService: ProductService) {}
 
@@ -108,10 +107,10 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
-  editProduct(product: Products) {
 
-    console.log('Editar producto:', product);
-    this.openProductForm(); 
+  editProduct(product: Products) {
+    this.currentProduct = { ...product }; 
+    this.showProductForm = true; 
   }
 
   deleteProduct(id?: number) {
@@ -162,41 +161,66 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
-  // --- Modal / Formulario Methods ---
 
   openProductForm() {
+    this.currentProduct = null; 
     this.showProductForm = true; 
-
   }
 
+ 
   onProductFormCancel() {
-    this.showProductForm = false;
+    this.showProductForm = false; 
+    this.currentProduct = null; 
   }
 
-  onProductFormCreate(newProduct: any) {
 
-    console.log('Producto recibido del formulario:', newProduct);
+  onProductFormCreate(newProduct: Products) {
 
-    const productToSend = { ...newProduct };
-    if (productToSend.state === 'Activo') {
-      productToSend.state = 'A';
-    } else if (productToSend.state === 'Inactivo') {
-      productToSend.state = 'I';
-    }
-
-    this.productService.create(productToSend).subscribe({ 
+    this.productService.create(newProduct).subscribe({
       next: (savedProduct) => {
         Swal.fire('¡Éxito!', 'Producto creado correctamente.', 'success');
         this.loadProducts(); 
         this.showProductForm = false; 
-   
+        this.currentProduct = null; 
       },
       error: (error) => {
         Swal.fire('Error', 'No se pudo crear el producto.', 'error');
-        console.error('Error creating product:', error);
+        console.error('Error creando producto:', error);
       }
     });
   }
 
+
+  onProductFormUpdate(updatedProduct: Products) {
+    if (!updatedProduct.productId) {
+      console.error('Error: No se encontró el ID del producto para la actualización.');
+      Swal.fire('Error', 'No se pudo actualizar el producto: ID faltante.', 'error');
+      return;
+    }
+
+
+    this.productService.update(updatedProduct.productId, updatedProduct).subscribe({
+      next: () => {
+        Swal.fire('¡Éxito!', 'Producto actualizado correctamente.', 'success');
+        this.loadProducts(); 
+        this.showProductForm = false; 
+        this.currentProduct = null; 
+      },
+      error: (error) => {
+        Swal.fire('Error', 'No se pudo actualizar el producto.', 'error');
+        console.error('Error actualizando producto:', error);
+      }
+    });
+  }
+
+  private mapProductState(product: Products): Products {
+    const mappedProduct = { ...product };
+    if (mappedProduct.state === 'Activo') {
+      mappedProduct.state = 'A';
+    } else if (mappedProduct.state === 'Inactivo') {
+      mappedProduct.state = 'I';
+    }
+    return mappedProduct;
+  }
 
 }
