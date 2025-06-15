@@ -91,3 +91,9 @@
   </div>
 
 </div>
+
+<app-products-form
+  [visible]="showProductForm"
+  (cancel)="onProductFormCancel()"
+  (create)="onProductFormCreate($event)">
+</app-products-form>

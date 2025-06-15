@@ -1,17 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Para ngModel
+import { FormsModule } from '@angular/forms'; 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ProductService } from '../../../core/services/products.service';
 import { Products } from '../../../core/interfaces/products';
 import Swal from 'sweetalert2';
+import { ProductsFormComponent } from '../products-form/products-form.component';
 
 @Component({
   selector: 'app-products-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatIconModule,
+    ProductsFormComponent 
+  ],
   templateUrl: './products-list.component.html',
   styleUrls: ['./products-list.component.scss'],
 })
@@ -26,14 +33,16 @@ export class ProductsListComponent implements OnInit {
   filterCategory: string = '';
   filterState: string = '';
 
+  showProductForm: boolean = false; 
+ 
+
+
   constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.filterState = this.showInactives ? 'I' : 'A';
     this.loadProducts();
   }
-
-
 
   toggleList() {
     this.showInactives = !this.showInactives;
@@ -57,10 +66,7 @@ export class ProductsListComponent implements OnInit {
     }
   }
 
-
-
   extractCategories() {
-    // Extraer categorías únicas para el filtro
     const cats = new Set<string>();
     this.products.forEach(p => {
       if (p.category) cats.add(p.category);
@@ -83,7 +89,6 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
-
   filterProducts() {
     if (this.filterState === 'A' || this.filterState === 'I' || this.filterState === '') {
       this.loadProducts();
@@ -92,7 +97,6 @@ export class ProductsListComponent implements OnInit {
       this.applyFilters();
     }
   }
-
 
   formatDate(dateString?: string): string {
     if (!dateString) return '-';
@@ -105,8 +109,9 @@ export class ProductsListComponent implements OnInit {
   }
 
   editProduct(product: Products) {
-    // Aquí abrirías el formulario para editar, o navegar a la ruta
+
     console.log('Editar producto:', product);
+    this.openProductForm(); 
   }
 
   deleteProduct(id?: number) {
@@ -157,10 +162,40 @@ export class ProductsListComponent implements OnInit {
     });
   }
 
+  // --- Modal / Formulario Methods ---
 
   openProductForm() {
-    // Aquí abrirías el formulario para crear nuevo producto
-    console.log('Abrir formulario nuevo producto');
+    this.showProductForm = true; 
+
+  }
+
+  onProductFormCancel() {
+    this.showProductForm = false;
+  }
+
+  onProductFormCreate(newProduct: any) {
+
+    console.log('Producto recibido del formulario:', newProduct);
+
+    const productToSend = { ...newProduct };
+    if (productToSend.state === 'Activo') {
+      productToSend.state = 'A';
+    } else if (productToSend.state === 'Inactivo') {
+      productToSend.state = 'I';
+    }
+
+    this.productService.create(productToSend).subscribe({ 
+      next: (savedProduct) => {
+        Swal.fire('¡Éxito!', 'Producto creado correctamente.', 'success');
+        this.loadProducts(); 
+        this.showProductForm = false; 
+   
+      },
+      error: (error) => {
+        Swal.fire('Error', 'No se pudo crear el producto.', 'error');
+        console.error('Error creating product:', error);
+      }
+    });
   }
 
 
