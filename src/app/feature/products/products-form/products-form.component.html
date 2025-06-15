@@ -1,47 +1,74 @@
 <div class="modal-container" *ngIf="visible">
   <div class="modal">
     <div class="modal-header">
-      <h2>Nuevo Producto</h2>
-      <p>Completa el formulario para crear un nuevo producto</p>
-      <!-- Botón cerrar -->
+      <h2>{{ productData ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+      <p>{{ productData ? 'Modifica los datos del producto' : 'Completa el formulario para crear un nuevo producto' }}</p>
       <button class="close-button" aria-label="Cerrar" (click)="onCancel()">×</button>
     </div>
 
-    <form class="form-grid">
+    <form class="form-grid" [formGroup]="productForm" (ngSubmit)="onSubmit()">
+      <input type="hidden" formControlName="productId">
+
       <div class="form-group">
-        <label>Nombre</label>
-        <input type="text" class="input error" placeholder="Ingrese el nombre" [(ngModel)]="product.name" name="name" />
+        <label for="name">Nombre</label>
+        <input type="text" id="name" class="input" placeholder="Ingrese el nombre" formControlName="name"
+               [class.error]="hasError('name', 'required') || hasError('name', 'minlength') || hasError('name', 'maxlength') || hasError('name', 'pattern')" />
+        <div *ngIf="hasError('name', 'required')" class="error-message">El nombre es obligatorio.</div>
+        <div *ngIf="hasError('name', 'minlength')" class="error-message">El nombre debe tener al menos 3 caracteres.</div>
+        <div *ngIf="hasError('name', 'maxlength')" class="error-message">El nombre no debe exceder los 20 caracteres.</div>
+        <div *ngIf="hasError('name', 'pattern')" class="error-message">El nombre solo puede contener letras y espacios.</div>
       </div>
 
       <div class="form-group">
-        <label>Descripción</label>
-        <input type="text" class="input" placeholder="Ingrese la descripción" [(ngModel)]="product.description" name="description" />
+        <label for="description">Descripción</label>
+        <input type="text" id="description" class="input" placeholder="Ingrese la descripción" formControlName="description"
+               [class.error]="hasError('description', 'required') || hasError('description', 'maxlength')" />
+        <div *ngIf="hasError('description', 'required')" class="error-message">La descripción es obligatoria.</div>
+        <div *ngIf="hasError('description', 'maxlength')" class="error-message">La descripción no debe exceder los 150 caracteres.</div>
       </div>
 
       <div class="form-group">
-        <label>Categoría</label>
-        <input type="text" class="input" placeholder="Ingrese la categoría" [(ngModel)]="product.category" name="category" />
-      </div>
-
-      <div class="form-group">
-        <label>Precio</label>
-        <input type="number" class="input" placeholder="Ingrese el precio" [(ngModel)]="product.price" name="price" step="0.01" />
-      </div>
-
-      <div class="form-group">
-        <label>Estado</label>
-        <select class="input" [(ngModel)]="product.state" name="state">
-          <option>Activo</option>
-          <option>Inactivo</option>
+        <label for="category">Categoría</label>
+        <select id="category" class="input" formControlName="category"
+                [class.error]="hasError('category', 'required') || hasError('category', 'pattern')">
+          <option *ngFor="let option of categoriesOptions" [value]="option.value">{{ option.label }}</option>
         </select>
+        <div *ngIf="hasError('category', 'required')" class="error-message">La categoría es obligatoria.</div>
+        <div *ngIf="hasError('category', 'pattern')" class="error-message">Categoría inválida (P o B).</div>
+      </div>
+
+      <div class="form-group">
+        <label for="price">Precio</label>
+        <input type="number" id="price" class="input" placeholder="Ingrese el precio" formControlName="price" step="0.01"
+               [class.error]="hasError('price', 'required') || hasError('price', 'min')" />
+        <div *ngIf="hasError('price', 'required')" class="error-message">El precio es obligatorio.</div>
+        <div *ngIf="hasError('price', 'min')" class="error-message">El precio debe ser mayor a 0.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input type="number" id="stock" class="input" placeholder="Ingrese el stock" formControlName="stock"
+               [class.error]="hasError('stock', 'required') || hasError('stock', 'min')" />
+        <div *ngIf="hasError('stock', 'required')" class="error-message">El stock es obligatorio.</div>
+        <div *ngIf="hasError('stock', 'min')" class="error-message">El stock debe ser mayor a 0.</div>
+      </div>
+
+      <div class="form-group">
+        <label for="state">Estado</label>
+        <select id="state" class="input" formControlName="state"
+                [class.error]="hasError('state', 'required') || hasError('state', 'pattern')">
+          <option *ngFor="let option of stateOptions" [value]="option.value">{{ option.label }}</option>
+        </select>
+        <div *ngIf="hasError('state', 'required')" class="error-message">El estado es obligatorio.</div>
+        <div *ngIf="hasError('state', 'pattern')" class="error-message">Estado inválido (Activo o Inactivo).</div>
       </div>
     </form>
 
     <div class="modal-footer">
-      <!-- Botón cancelar -->
       <button class="btn cancel" type="button" (click)="onCancel()">Cancelar</button>
-      <!-- Botón crear -->
-      <button class="btn confirm" type="button" (click)="onCreate()">Crear producto</button>
+      <button class="btn confirm" type="button" (click)="onSubmit()">
+        {{ productData ? 'Guardar Cambios' : 'Crear producto' }}
+      </button>
     </div>
   </div>
 </div>
